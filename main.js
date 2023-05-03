@@ -210,13 +210,13 @@ function addLikesCtaEventListener(likeButton, post) {
 	likeButton.addEventListener("click", function (event) {
 		event.preventDefault();
 
+		// call function that updates "likedPosts" array
+		updateLikedPosts(likeButton, post);
+
 		likeButton.classList.toggle("like-button--liked");
 
 		document.querySelector(`#like-counter-${post.id}`).textContent =
 			post.likes;
-
-		// call function that updates "likedPosts" array
-		updateLikedPosts(likeButton, post);
 	});
 }
 
@@ -235,10 +235,10 @@ function makeInitials(name) {
 // and removes them if unliked
 function updateLikedPosts(likeButton, post) {
 	if (likeButton.classList.contains("like-button--liked")) {
-		post.likes++;
-		likedPosts.push(post);
-	} else {
 		post.likes--;
 		likedPosts.splice(likedPosts.indexOf(post), 1);
+	} else {
+		post.likes++;
+		likedPosts.push(post);
 	}
 }
