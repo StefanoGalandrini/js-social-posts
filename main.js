@@ -87,9 +87,16 @@ const posts = [
 ];
 
 // declaring DOM variables
+// const parentBody = document.querySelector("body");
 const parentContainer = document.getElementById("container");
 
-createPost(posts[0]);
+// iterate on array to generate all posts
+posts.forEach((post) => {
+	// const postElement = document.createElement("div");
+	// postElement.className = "post";
+	createPost(post);
+	// postElement.innerHTML = createPost(post);
+});
 
 // FUNCTIONS DEFINITION
 
@@ -194,6 +201,8 @@ function createPost(post) {
 	likesCounter.className = "likes__counter";
 	likesCounter.innerHTML = `Piace a <b id="like-counter-${post.id}" class="js-likes-counter">${post.likes}</b> persone`;
 	likesContainer.appendChild(likesCounter);
+
+	// RETURN HTML POST
 	return postElement;
 }
 
