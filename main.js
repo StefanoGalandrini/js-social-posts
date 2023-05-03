@@ -133,19 +133,10 @@ function createPost(post) {
 	authorName.textContent = post.author.name;
 	postData.appendChild(authorName);
 
-	// Create time
+	// Create time with reverse date
 	const time = document.createElement("div");
 	time.className = "post-meta__time";
-
-	// Calculate the time difference between the current date and the created date of the post
-	const currentDate = new Date();
-	const createdDate = new Date(post.created);
-	const timeDiffInMonths =
-		(currentDate.getFullYear() - createdDate.getFullYear()) * 12 +
-		currentDate.getMonth() -
-		createdDate.getMonth();
-	time.textContent =
-		timeDiffInMonths === 0 ? "Questo mese" : `${timeDiffInMonths} mesi fa`;
+	time.innerHTML = reverseDate(post.created);
 	postData.appendChild(time);
 
 	// Create post text
@@ -169,4 +160,11 @@ function createPost(post) {
 	const postFooter = document.createElement("div");
 	postFooter.className = "post__footer";
 	postElement.appendChild(postFooter);
+}
+
+reverseDate("2023-05-03");
+function reverseDate(oldDate) {
+	const arrDate = oldDate.split("-");
+	const date = `${arrDate[2]}-${arrDate[1]}-${arrDate[0]}`;
+	return date;
 }
