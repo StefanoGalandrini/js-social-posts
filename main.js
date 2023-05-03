@@ -97,7 +97,6 @@ function createPost(post) {
 	// Create post container
 	const postElement = document.createElement("div");
 	postElement.className = "post";
-	console.log(postElement);
 	parentContainer.appendChild(postElement);
 
 	// Create post header
@@ -133,7 +132,7 @@ function createPost(post) {
 	authorName.textContent = post.author.name;
 	postData.appendChild(authorName);
 
-	// Create time with reverse date
+	// Create post time with reverse date
 	const time = document.createElement("div");
 	time.className = "post-meta__time";
 	time.innerHTML = reverseDate(post.created);
@@ -160,9 +159,44 @@ function createPost(post) {
 	const postFooter = document.createElement("div");
 	postFooter.className = "post__footer";
 	postElement.appendChild(postFooter);
+
+	// Create likes container
+	const likesContainer = document.createElement("div");
+	likesContainer.className = "likes js-likes";
+	postFooter.appendChild(likesContainer);
+
+	// Create likes call to action
+	const likesCta = document.createElement("div");
+	likesCta.className = "likes__cta";
+	likesContainer.appendChild(likesCta);
+
+	// Create like button
+	const likeButton = document.createElement("a");
+	likeButton.className = "like-button js-like-button";
+	likeButton.href = "#";
+	likeButton.dataset.postid = post.id;
+	likesCta.appendChild(likeButton);
+
+	// Create like button icon
+	const likeButtonIcon = document.createElement("i");
+	likeButtonIcon.className = "like-button__icon fas fa-thumbs-up";
+	likeButtonIcon.setAttribute("aria-hidden", "true");
+	likeButton.appendChild(likeButtonIcon);
+
+	// Create like button label
+	const likeButtonLabel = document.createElement("span");
+	likeButtonLabel.className = "like-button__label";
+	likeButtonLabel.textContent = " Mi Piace";
+	likeButton.appendChild(likeButtonLabel);
+
+	// Create likes counter
+	const likesCounter = document.createElement("div");
+	likesCounter.className = "likes__counter";
+	likesCounter.innerHTML = `Piace a <b id="like-counter-${post.id}" class="js-likes-counter">${post.likes}</b> persone`;
+	likesContainer.appendChild(likesCounter);
+	return postElement;
 }
 
-reverseDate("2023-05-03");
 function reverseDate(oldDate) {
 	const arrDate = oldDate.split("-");
 	const date = `${arrDate[2]}-${arrDate[1]}-${arrDate[0]}`;
