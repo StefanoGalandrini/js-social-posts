@@ -20,7 +20,18 @@ BONUS
 con un elemento di fallback che contiene le iniziali dell'utente
 (es. Luca Formicola > LF).
 3. Al click su un pulsante "Mi Piace" di un post,
-se abbiamo già cliccato dobbiamo decrementare il contatore e cambiare il colore del bottone.
+se abbiamo già cliccato dobbiamo decrementare il contatore 
+e cambiare il colore del bottone.
+*/
+
+/* 
+ANCORA DA FARE 
+- Salviamo in un secondo array 
+gli id dei post ai quali abbiamo messo il like.
+
+BONUS:
+
+
 */
 
 const posts = [
@@ -217,7 +228,7 @@ function createPost(post) {
 
 function reverseDate(oldDate) {
 	const arrDate = oldDate.split("-");
-	const date = `${arrDate[2]}-${arrDate[1]}-${arrDate[0]}`;
+	const date = `${arrDate[2]}/${arrDate[1]}/${arrDate[0]}`;
 	return date;
 }
 
