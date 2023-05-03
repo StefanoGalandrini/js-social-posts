@@ -99,7 +99,6 @@ posts.forEach((post) => {
 });
 
 // FUNCTIONS DEFINITION
-
 function createPost(post) {
 	// Create post container
 	const postElement = document.createElement("div");
@@ -196,6 +195,9 @@ function createPost(post) {
 	likeButtonLabel.textContent = " Mi Piace";
 	likeButton.appendChild(likeButtonLabel);
 
+	// call function to add Event Listener and modify class and likes
+	addLikesCtaEventListener(likeButton, post);
+
 	// Create likes counter
 	const likesCounter = document.createElement("div");
 	likesCounter.className = "likes__counter";
@@ -210,4 +212,33 @@ function reverseDate(oldDate) {
 	const arrDate = oldDate.split("-");
 	const date = `${arrDate[2]}-${arrDate[1]}-${arrDate[0]}`;
 	return date;
+}
+
+// addEventListener to likes button
+// that toggles class,
+// increments or decrements the likes
+function addLikesCtaEventListener(likeButton, post) {
+	// Add event listener to like button
+	likeButton.addEventListener("click", function (event) {
+		event.preventDefault();
+
+		// Toggle liked class on like button element
+		likeButton.classList.toggle("like-button--liked");
+
+		// Find post in posts array
+		const postIndex = posts.findIndex(function (post) {
+			return post.id === parseInt(likeButton.dataset.postid);
+		});
+
+		// Increment or decrement post.likes
+		if (likeButton.classList.contains("like-button--liked")) {
+			posts[postIndex].likes++;
+		} else {
+			posts[postIndex].likes--;
+		}
+
+		// Update likes counter text
+		document.querySelector(`#like-counter-${post.id}`).textContent =
+			posts[postIndex].likes;
+	});
 }
