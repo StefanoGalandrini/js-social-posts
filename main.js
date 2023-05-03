@@ -24,16 +24,6 @@ se abbiamo già cliccato dobbiamo decrementare il contatore
 e cambiare il colore del bottone.
 */
 
-/* 
-ANCORA DA FARE 
-- Salviamo in un secondo array 
-gli id dei post ai quali abbiamo messo il like.
-
-BONUS:
-
-
-*/
-
 const posts = [
 	{
 		id: 1,
@@ -97,41 +87,35 @@ const posts = [
 	},
 ];
 
-// declaring DOM variables
-// const parentBody = document.querySelector("body");
+// declaring DOM and global variables
 const parentContainer = document.getElementById("container");
+const likedPosts = [];
 
 // iterate on array to generate all posts
 posts.forEach((post) => {
-	// const postElement = document.createElement("div");
-	// postElement.className = "post";
 	createPost(post);
-	// postElement.innerHTML = createPost(post);
 });
 
 // FUNCTIONS DEFINITION
 function createPost(post) {
-	// Create post container
+	// Create HTML structure
 	const postElement = document.createElement("div");
 	postElement.className = "post";
 	parentContainer.appendChild(postElement);
 
-	// Create post header
 	const postHeader = document.createElement("div");
 	postHeader.className = "post__header";
 	postElement.appendChild(postHeader);
 
-	// Create post meta
 	const postMeta = document.createElement("div");
 	postMeta.className = "post-meta";
 	postHeader.appendChild(postMeta);
 
-	// Create post meta icon
 	const postMetaIcon = document.createElement("div");
 	postMetaIcon.className = "post-meta__icon";
 	postMeta.appendChild(postMetaIcon);
 
-	// Create profile picture
+	// IF profile picture = null then fallback
 	if (post.author.image !== null) {
 		const profilePic = document.createElement("img");
 		profilePic.className = "profile-pic";
@@ -145,87 +129,75 @@ function createPost(post) {
 		postMetaIcon.appendChild(profilePic);
 	}
 
-	// Create post meta data
 	const postData = document.createElement("div");
 	postData.className = "post-meta__data";
 	postMeta.appendChild(postData);
 
-	// Create author name
 	const authorName = document.createElement("div");
 	authorName.className = "post-meta__author";
 	authorName.textContent = post.author.name;
 	postData.appendChild(authorName);
 
-	// Create post time with reverse date
 	const time = document.createElement("div");
 	time.className = "post-meta__time";
 	time.innerHTML = reverseDate(post.created);
 	postData.appendChild(time);
 
-	// Create post text
 	const postText = document.createElement("div");
 	postText.className = "post__text";
 	postText.textContent = post.content;
 	postElement.appendChild(postText);
 
-	// Create post image
 	const postImage = document.createElement("div");
 	postImage.className = "post__image";
 	postElement.appendChild(postImage);
 
-	// Create image
 	const image = document.createElement("img");
 	image.src = post.media;
 	image.alt = "";
 	postImage.appendChild(image);
 
-	// Create post footer
 	const postFooter = document.createElement("div");
 	postFooter.className = "post__footer";
 	postElement.appendChild(postFooter);
 
-	// Create likes container
 	const likesContainer = document.createElement("div");
 	likesContainer.className = "likes js-likes";
 	postFooter.appendChild(likesContainer);
 
-	// Create likes call to action
 	const likesCta = document.createElement("div");
 	likesCta.className = "likes__cta";
 	likesContainer.appendChild(likesCta);
 
-	// Create like button
 	const likeButton = document.createElement("a");
 	likeButton.className = "like-button js-like-button";
 	likeButton.href = "#";
 	likeButton.dataset.postid = post.id;
 	likesCta.appendChild(likeButton);
 
-	// Create like button icon
 	const likeButtonIcon = document.createElement("i");
 	likeButtonIcon.className = "like-button__icon fas fa-thumbs-up";
 	likeButtonIcon.setAttribute("aria-hidden", "true");
 	likeButton.appendChild(likeButtonIcon);
 
-	// Create like button label
 	const likeButtonLabel = document.createElement("span");
 	likeButtonLabel.className = "like-button__label";
 	likeButtonLabel.textContent = " Mi Piace";
 	likeButton.appendChild(likeButtonLabel);
 
-	// call function to add Event Listener and modify class and likes
-	addLikesCtaEventListener(likeButton, post);
-
-	// Create likes counter
 	const likesCounter = document.createElement("div");
 	likesCounter.className = "likes__counter";
 	likesCounter.innerHTML = `Piace a <b id="like-counter-${post.id}" class="js-likes-counter">${post.likes}</b> persone`;
 	likesContainer.appendChild(likesCounter);
 
+	// call function to add Event Listener and modify class and likes
+	addLikesCtaEventListener(likeButton, post);
+
 	// RETURN HTML POST
 	return postElement;
 }
 
+// reverse the date from YYYY-MM-DD to DD/MM/YYYY
 function reverseDate(oldDate) {
 	const arrDate = oldDate.split("-");
 	const date = `${arrDate[2]}/${arrDate[1]}/${arrDate[0]}`;
@@ -233,38 +205,40 @@ function reverseDate(oldDate) {
 }
 
 // addEventListener to likes button
-// that toggles class,
-// increments or decrements the likes
+// that toggles "liked" class and increments or decrements the likes
 function addLikesCtaEventListener(likeButton, post) {
-	// Add event listener to like button
 	likeButton.addEventListener("click", function (event) {
 		event.preventDefault();
 
-		// Toggle liked class on like button element
 		likeButton.classList.toggle("like-button--liked");
 
-		// Find post in posts array
-		const postIndex = posts.findIndex(function (post) {
-			return post.id === parseInt(likeButton.dataset.postid);
-		});
-
-		// Increment or decrement post.likes
-		if (likeButton.classList.contains("like-button--liked")) {
-			posts[postIndex].likes++;
-		} else {
-			posts[postIndex].likes--;
-		}
-
-		// Update likes counter text
 		document.querySelector(`#like-counter-${post.id}`).textContent =
-			posts[postIndex].likes;
+			post.likes;
+
+		// call function that updates "likedPosts" array
+		updateLikedPosts(likeButton, post);
 	});
 }
 
+// fallback IF author img is null THEN
+// creates a string with initials of first and last name
 function makeInitials(name) {
 	const arrName = name.split(" ");
 	const initFirst = arrName[0].charAt(0);
 	const initLast = arrName[1].charAt(0);
 	const nameInit = `${initFirst}${initLast}`.toUpperCase();
 	return nameInit;
+}
+
+// Check "liked" class to increment likes and add element to likedArray
+// push liked posts in the second array (likedPosts)
+// and removes them if unliked
+function updateLikedPosts(likeButton, post) {
+	if (likeButton.classList.contains("like-button--liked")) {
+		post.likes++;
+		likedPosts.push(post);
+	} else {
+		post.likes--;
+		likedPosts.splice(likedPosts.indexOf(post), 1);
+	}
 }
