@@ -121,11 +121,18 @@ function createPost(post) {
 	postMeta.appendChild(postMetaIcon);
 
 	// Create profile picture
-	const profilePic = document.createElement("img");
-	profilePic.className = "profile-pic";
-	profilePic.src = post.author.image;
-	profilePic.alt = post.author.name;
-	postMetaIcon.appendChild(profilePic);
+	if (post.author.image !== null) {
+		const profilePic = document.createElement("img");
+		profilePic.className = "profile-pic";
+		profilePic.src = post.author.image;
+		profilePic.alt = post.author.name;
+		postMetaIcon.appendChild(profilePic);
+	} else {
+		const profilePic = document.createElement("span");
+		profilePic.className = "profile-pic-default";
+		profilePic.innerHTML = makeInitials(post.author.name);
+		postMetaIcon.appendChild(profilePic);
+	}
 
 	// Create post meta data
 	const postData = document.createElement("div");
@@ -241,4 +248,12 @@ function addLikesCtaEventListener(likeButton, post) {
 		document.querySelector(`#like-counter-${post.id}`).textContent =
 			posts[postIndex].likes;
 	});
+}
+
+function makeInitials(name) {
+	const arrName = name.split(" ");
+	const initFirst = arrName[0].charAt(0);
+	const initLast = arrName[1].charAt(0);
+	const nameInit = `${initFirst}${initLast}`.toUpperCase();
+	return nameInit;
 }
