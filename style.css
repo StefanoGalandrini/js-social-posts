@@ -31,7 +31,7 @@ h1 {
     margin-bottom: 24px;
 }
 
-.post { 
+.post {
     padding: 16px;
     background-color: white;
 }
@@ -106,7 +106,7 @@ h1 {
 .like-button {
     display: inline-block;
     padding: 16px;
-    border-radius: 8px;    
+    border-radius: 8px;
     text-decoration: none;
     color: #404040;
 }
